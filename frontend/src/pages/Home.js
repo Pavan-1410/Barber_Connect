@@ -27,11 +27,18 @@ const Home = () => {
       if (filters.rating) params.append('rating', filters.rating);
       if (filters.service) params.append('service', filters.service);
 
-      const response = await axios.get(`/api/barbers?${params}`);
-      setBarbers(response.data.barbers);
+      const apiUrl = `/api/barbers?${params}`;
+      console.log('Fetching barbers from:', apiUrl);
+      
+      const response = await axios.get(apiUrl);
+      console.log('Barbers response:', response.data);
+      
+      setBarbers(response.data.barbers || []);
     } catch (error) {
       console.error('Error fetching barbers:', error);
+      console.error('Error response:', error.response?.data);
       toast.error('Failed to load barbers');
+      setBarbers([]); // Set to empty array instead of undefined
     } finally {
       setLoading(false);
     }
@@ -155,7 +162,7 @@ const Home = () => {
             <div className="flex justify-center items-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
             </div>
-          ) : barbers.length === 0 ? (
+          ) : !barbers || barbers.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-secondary-600 text-lg">No barbers found matching your criteria.</p>
               <button
@@ -192,7 +199,7 @@ const Home = () => {
                   <div className="mb-4">
                     <h4 className="font-semibold text-secondary-700 mb-2">Services:</h4>
                     <div className="flex flex-wrap gap-2">
-                      {barber.services.slice(0, 3).map((service, index) => (
+                      {barber.services && barber.services.slice(0, 3).map((service, index) => (
                         <span
                           key={index}
                           className="bg-primary-100 text-primary-700 px-2 py-1 rounded text-sm"
@@ -200,7 +207,7 @@ const Home = () => {
                           {service.name} - ₹{service.price}
                         </span>
                       ))}
-                      {barber.services.length > 3 && (
+                      {barber.services && barber.services.length > 3 && (
                         <span className="text-secondary-500 text-sm">
                           +{barber.services.length - 3} more
                         </span>
