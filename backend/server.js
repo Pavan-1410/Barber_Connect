@@ -22,6 +22,7 @@ app.use(cors({
     'http://localhost:3000',
     'https://barberconnect-frontend.vercel.app',
     'https://barberconnect.vercel.app',
+    'https://barber-connect-rho.vercel.app',
     'https://*.vercel.app',
     'https://*.netlify.app'
   ],
