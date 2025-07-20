@@ -11,7 +11,7 @@ const router = express.Router();
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const { city, rating, service, page = 1, limit = 10 } = req.query;
+    const { city, rating, service, userId, page = 1, limit = 10 } = req.query;
     
     const query = { isActive: true };
     
@@ -25,6 +25,10 @@ router.get('/', async (req, res) => {
     
     if (service) {
       query['services.name'] = { $regex: service, $options: 'i' };
+    }
+    
+    if (userId) {
+      query.userId = userId;
     }
 
     const barbers = await BarberProfile.find(query)
