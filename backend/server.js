@@ -17,7 +17,16 @@ const paymentRoutes = require('./routes/payments');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://barberconnect-frontend.vercel.app',
+    'https://barberconnect.vercel.app',
+    'https://*.vercel.app',
+    'https://*.netlify.app'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
